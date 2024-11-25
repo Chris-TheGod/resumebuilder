@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function page() {
-  return <main>Here will be your resumes.</main>;
+  return <div>page</div>;
 }
