@@ -8,9 +8,13 @@ import { useSearchParams } from "next/navigation";
 import { steps } from "./steps";
 import BreadCrumbs from "./BreadCrumbs";
 import Footer from "./Footer";
+import { useState } from "react";
+import { ResumeValues } from "@/lib/validation";
 
 export default function ResumeEditor() {
   const searchParams = useSearchParams();
+
+  const [resumeData, setResumeData] = useState<ResumeValues>({});
 
   const currentStep = searchParams.get("step") || steps[0].key;
 
