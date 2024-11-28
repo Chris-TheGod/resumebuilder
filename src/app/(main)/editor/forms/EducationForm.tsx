@@ -1,8 +1,17 @@
+import { Button } from "@/components/ui/button";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { EditorFormProps } from "@/lib/types";
 import { educationSchema, EducationValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { GripHorizontal } from "lucide-react";
 import { useEffect } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
 
 export default function EducationForm({
   resumeData,
@@ -33,4 +42,72 @@ export default function EducationForm({
   });
 
   return <div>EducationForm</div>;
+}
+
+type EducationItemProps = {
+  form: UseFormReturn<EducationValues>;
+  index: number;
+  remove: (index: number) => void;
+};
+
+function EducationItem({ form, index, remove }: EducationItemProps) {
+  <div className="space-y-3 rounded-md border bg-background p-3">
+    <div className="flex justify-between gap-2">
+      <span className="font-semibold">Education {index + 1}</span>
+      <GripHorizontal className="size-5 cursor-grab text-muted-foreground" />
+    </div>
+    <FormField
+      control={form.control}
+      name={`educations.${index}.degree`}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Degree</FormLabel>
+          <FormControl>
+            <Input {...field} autoFocus />
+          </FormControl>
+        </FormItem>
+      )}
+    />
+    <FormField
+      control={form.control}
+      name={`educations.${index}.school`}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>School</FormLabel>
+          <FormControl>
+            <Input {...field} />
+          </FormControl>
+        </FormItem>
+      )}
+    />
+    <div className="grid grid-cols-2 gap-3">
+      <FormField
+        control={form.control}
+        name={`educations.${index}.startDate`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Start date</FormLabel>
+            <FormControl>
+              <Input {...field} type="date" value={field.value?.slice(0, 10)} />
+            </FormControl>
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name={`educations.${index}.endDate`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>End date</FormLabel>
+            <FormControl>
+              <Input {...field} type="date" value={field.value?.slice(0, 10)} />
+            </FormControl>
+          </FormItem>
+        )}
+      />
+    </div>
+    <Button variant="destructive" type="button" onClick={() => remove(index)}>
+      Remove
+    </Button>
+  </div>;
 }
