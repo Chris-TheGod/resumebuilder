@@ -48,8 +48,18 @@ type ResumeSectionProps = {
 };
 
 function PersonalInfoHeader({ resumeData }: ResumeSectionProps) {
-  const { photo, firstName, lastName, jobTitle, city, country, phone, email } =
-    resumeData;
+  const {
+    photo,
+    firstName,
+    lastName,
+    jobTitle,
+    city,
+    country,
+    phone,
+    email,
+    colorHex,
+    borderStyle,
+  } = resumeData;
 
   const [photoSrc, setPhotoSrc] = useState(photo instanceof File ? "" : photo);
   useEffect(() => {
