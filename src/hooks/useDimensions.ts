@@ -6,12 +6,12 @@ export default function useDimensions(
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    const currentReft = containerRef.current;
+    const currentRef = containerRef.current;
 
     function getDimensions() {
       return {
-        width: currentReft?.offsetWidth || 0,
-        height: currentReft?.offsetHeight || 0,
+        width: currentRef?.offsetWidth || 0,
+        height: currentRef?.offsetHeight || 0,
       };
     }
 
@@ -22,14 +22,14 @@ export default function useDimensions(
       }
     });
 
-    if (currentReft) {
-      resizeObserver.observe(currentReft);
+    if (currentRef) {
+      resizeObserver.observe(currentRef);
       setDimensions(getDimensions());
     }
 
     return () => {
-      if (currentReft) {
-        resizeObserver.unobserve(currentReft);
+      if (currentRef) {
+        resizeObserver.unobserve(currentRef);
       }
       resizeObserver.disconnect();
     };

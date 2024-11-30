@@ -1,7 +1,8 @@
 import useDimensions from "@/hooks/useDimensions";
 import { cn } from "@/lib/utils";
 import { ResumeValues } from "@/lib/validation";
-import { useRef } from "react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 type ResumePreviewProps = {
   resumeData: ResumeValues;
@@ -12,9 +13,9 @@ export default function ResumePreview({
   resumeData,
   className,
 }: ResumePreviewProps) {
-  const cotainerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const { width } = useDimensions(cotainerRef);
+  const { width } = useDimensions(containerRef);
 
   return (
     <div
@@ -22,7 +23,7 @@ export default function ResumePreview({
         "aspect-[210/297] h-fit w-full bg-white text-black",
         className,
       )}
-      ref={cotainerRef}
+      ref={containerRef}
     >
       <div
         className={cn("space-y-6 p-6", !width && "invisible")}
@@ -30,9 +31,45 @@ export default function ResumePreview({
           zoom: (1 / 794) * width,
         }}
       >
-        <h1 className="p-6 text-3xl font-bold">
-          This text should change with the size of the container div
-        </h1>
+        <PersonalInfoHeader resumeData={resumeData} />
+      </div>
+    </div>
+  );
+}
+
+type ResumeSectionProps = {
+  resumeData: ResumeValues;
+};
+
+function PersonalInfoHeader({ resumeData }: ResumeSectionProps) {
+  const { photo, firstName, lastName, jobTitle, city, country, phone, email } =
+    resumeData;
+
+  const [photoSrc, setPhotoSrc] = useState(photo instanceof File ? "" : photo);
+  useEffect(() => {
+    const objectUrl = photo instanceof File ? URL.createObjectURL(photo) : "";
+    if (objectUrl) setPhotoSrc(objectUrl);
+    if (photo === null) setPhotoSrc("");
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [photo]);
+
+  return (
+    <div className="flex items-center gap-6">
+      {photoSrc && (
+        <Image
+          src={photoSrc}
+          width={100}
+          height={100}
+          alt="Author photo"
+          className="aspect-square object-cover"
+        />
+      )}
+      <div className="space-y-2.5">
+        <div className="space-y-1">
+          <p className="text-3xl font-bold">
+            {firstName} {lastName}
+          </p>
+        </div>
       </div>
     </div>
   );
