@@ -12,6 +12,7 @@ import { useState } from "react";
 import { ResumeValues } from "@/lib/validation";
 import ResumePreviewSection from "./ResumePreviewSection";
 import { cn } from "@/lib/utils";
+import useUnloadWarning from "@/hooks/useUnlaodWarning";
 
 export default function ResumeEditor() {
   const searchParams = useSearchParams();
