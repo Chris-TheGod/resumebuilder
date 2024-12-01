@@ -161,7 +161,7 @@ function WorkExperienceItem({
     <div
       className={cn(
         "space-y-3 rounded-md border bg-background p-3",
-        isDragging && "z-50 shadow-xl",
+        isDragging && "relative z-50 cursor-grab shadow-xl",
       )}
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
@@ -169,7 +169,7 @@ function WorkExperienceItem({
       <div className="flex justify-between gap-2">
         <span className="font-semibold">Work experiece {index + 1}</span>
         <GripHorizontal
-          className="size-5 cursor-grab text-muted-foreground"
+          className="size-5 cursor-grab text-muted-foreground focus:outline-none"
           {...attributes}
           {...listeners}
         />
