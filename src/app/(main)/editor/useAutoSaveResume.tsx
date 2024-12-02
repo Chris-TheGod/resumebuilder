@@ -5,6 +5,7 @@ import { set } from "date-fns";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { saveResume } from "./actions";
+import { Button } from "@/components/ui/button";
 
 export default function useAutoSaveResume(resumeData: ResumeValues) {
   const searchParams = useSearchParams();
@@ -44,18 +45,56 @@ export default function useAutoSaveResume(resumeData: ResumeValues) {
 
         setResumeId(updatedResume.id);
         setLastSavedData(newData);
+
+        if (searchParams.get("resumeId") !== updatedResume.id) {
+          const newSearchParams = new URLSearchParams(searchParams);
+          newSearchParams.set("resumeId", updatedResume.id);
+          window.history.replaceState(
+            null,
+            "",
+            `?${newSearchParams.toString()}`,
+          );
+        }
       } catch (error) {
-        console.log(error);
+        setIsError(true);
+        console.error(error);
+        const { dismiss } = toast({
+          variant: "destructive",
+          description: (
+            <div className="space-y-3">
+              <p>Could not save changes</p>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  dismiss();
+                  save();
+                }}
+              >
+                Retry
+              </Button>
+            </div>
+          ),
+        });
+      } finally {
+        setIsSaving(false);
       }
     }
 
     const hasUnsavedChanges =
       JSON.stringify(debouncedResumeData) !== JSON.stringify(lastSavedData);
 
-    if (hasUnsavedChanges && debouncedResumeData && !isSaving) {
+    if (hasUnsavedChanges && debouncedResumeData && !isSaving && !isError) {
       save();
     }
-  }, [debouncedResumeData, lastSavedData, isSaving]);
+  }, [
+    debouncedResumeData,
+    lastSavedData,
+    isSaving,
+    isError,
+    resumeId,
+    toast,
+    searchParams,
+  ]);
 
   return {
     isSaving,
