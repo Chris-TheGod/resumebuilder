@@ -14,11 +14,16 @@ import ResumePreviewSection from "./ResumePreviewSection";
 import { cn } from "@/lib/utils";
 import useUnloadWarning from "@/hooks/useUnlaodWarning";
 import useAutoSaveResume from "./useAutoSaveResume";
+import { ResumeServerData } from "@/lib/types";
 
-export default function ResumeEditor() {
+type ResumeEditorProps = {
+  resumeToEdit: ResumeServerData | null;
+};
+
+export default function ResumeEditor({ resumeToEdit }: ResumeEditorProps) {
   const searchParams = useSearchParams();
 
-  const [resumeData, setResumeData] = useState<ResumeValues>({});
+  const [resumeData, setResumeData] = useState<ResumeValues>(resumeToEdit);
 
   const [showSmResumePreview, setShowSmResumePreview] = useState(false);
 

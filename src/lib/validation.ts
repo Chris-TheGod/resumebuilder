@@ -1,4 +1,3 @@
-import { start } from "repl";
 import { z } from "zod";
 
 export const optionalString = z.string().trim().optional().or(z.literal(""));
@@ -70,11 +69,11 @@ export const skillsSchema = z.object({
 
 export type SkillsValues = z.infer<typeof skillsSchema>;
 
-export const SummarySchema = z.object({
+export const summarySchema = z.object({
   summary: optionalString,
 });
 
-export type SummaryValues = z.infer<typeof SummarySchema>;
+export type SummaryValues = z.infer<typeof summarySchema>;
 
 export const resumeSchema = z.object({
   ...generalInfoSchema.shape,
@@ -82,7 +81,7 @@ export const resumeSchema = z.object({
   ...workExperienceSchema.shape,
   ...educationSchema.shape,
   ...skillsSchema.shape,
-  ...SummarySchema.shape,
+  ...summarySchema.shape,
   colorHex: optionalString,
   borderStyle: optionalString,
 });
