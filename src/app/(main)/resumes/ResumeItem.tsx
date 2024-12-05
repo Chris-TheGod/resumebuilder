@@ -95,6 +95,11 @@ function MoreMenu({ resumeId }: MoreMenuProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <DeleteConfirmationDialog
+        resumeId={resumeId}
+        open={showDeleteConfirmation}
+        onOpenChange={setShowDeleteConfirmation}
+      />
     </>
   );
 }
