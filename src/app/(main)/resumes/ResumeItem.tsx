@@ -4,14 +4,26 @@ import ResumePreview from "@/components/ResumePreview";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
 import { ResumeServerData } from "@/lib/types";
 import { mapToResumeValues } from "@/lib/utils";
 import { formatDate } from "date-fns";
-import { MoreVertical } from "lucide-react";
+import { MoreVertical, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { deleteResume } from "./actions";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 type ResumeItemProps = {
   resume: ResumeServerData;
@@ -73,7 +85,69 @@ function MoreMenu({ resumeId }: MoreMenuProps) {
             <MoreVertical className="size-4" />
           </Button>
         </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem
+            className="flex items-center gap-2"
+            onClick={() => setShowDeleteConfirmation(true)}
+          >
+            <Trash2 className="size-4" />
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
       </DropdownMenu>
     </>
+  );
+}
+
+type DeleteConfirmationDialogProps = {
+  resumeId: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
+
+function DeleteConfirmationDialog({
+  resumeId,
+  open,
+  onOpenChange,
+}: DeleteConfirmationDialogProps) {
+  const { toast } = useToast();
+
+  const [isPending, startTransition] = useTransition();
+
+  async function handleDelete() {
+    startTransition(async () => {
+      try {
+        await deleteResume(resumeId);
+        onOpenChange(false);
+      } catch (error) {
+        console.error(error);
+        toast({
+          variant: "destructive",
+          description: "Something went wrong. Please try again later.",
+        });
+      }
+    });
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Delete resume</DialogTitle>
+          <DialogDescription>
+            This will permanetly delete this resume. This action cannot be
+            undone.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="destructive" onClick={handleDelete}>
+            Delete
+          </Button>
+          <Button variant="secondary" onClick={() => onOpenChange(false)}>
+            Cancel
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
