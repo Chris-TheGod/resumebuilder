@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { EditorFormProps } from "@/lib/types";
-import { SummarySchema, SummaryValues } from "@/lib/validation";
+import { summarySchema, SummaryValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -18,7 +18,7 @@ export default function SummaryForm({
   setResumeData,
 }: EditorFormProps) {
   const form = useForm<SummaryValues>({
-    resolver: zodResolver(SummarySchema),
+    resolver: zodResolver(summarySchema),
     defaultValues: {
       summary: resumeData.summary || "",
     },
