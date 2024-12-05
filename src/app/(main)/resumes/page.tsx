@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { PlusSquare } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
+import ResumeItem from "./ResumeItem";
 
 export const metadata: Metadata = {
   title: "Your resumes",
@@ -47,8 +48,8 @@ export default async function page() {
         <p>Total: {totalCount}</p>
       </div>
       <div className="flex w-full grid-cols-2 flex-col gap-3 sm:grid md:grid-cols-3 lg:grid-cols-4">
-        {resumes.map(resume => (
-          
+        {resumes.map((resume) => (
+          <ResumeItem key={resume.id} resume={resume} />
         ))}
       </div>
     </main>
